@@ -1,6 +1,6 @@
 import itertools
-from position import Position
-from scenario import Scenario
+from models import Position, Scenario
+
 def evaluate(market):
 
     maxReturn = (None, None, -1000)

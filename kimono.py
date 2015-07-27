@@ -1,7 +1,6 @@
 import json
 import urllib
-from market import Market
-from ticker import Ticker
+from models import Market, Ticker
 
 def get_predictit_markets():
     raw = json.load(urllib.urlopen("https://www.kimonolabs.com/api/1z8qa6p4?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1"))
