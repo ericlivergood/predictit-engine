@@ -51,7 +51,7 @@ def _decode_ticker_json(data):
     )
 
 def _parse_price(price):
-    if price == 'None':
+    if price == 'None' or price is None:
         return None
     else:
         return float(price)/100
