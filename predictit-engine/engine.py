@@ -1,5 +1,5 @@
 import kimono
-import buy_no
+import buy_no, buy_yes
 import json
 import io
 
@@ -25,4 +25,12 @@ def evaluate_all(markets):
                 print ('Tickers: ' + x[0].positionstring())
                 print ('')
 
-evaluate_all(load())
+def evaluate_buy_yes(markets):
+    for m in markets:
+        x = buy_yes.evaluate(m)
+        print(m.name +'('+m.market_id+')')
+        print('-------------------------------------------')
+        print('Return on buy yes: ' + str(x) + '')
+
+#evaluate_all(load())
+evaluate_buy_yes(load())
