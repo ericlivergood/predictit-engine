@@ -2,8 +2,12 @@ import json
 import urllib
 from models import Market, Ticker
 
-def get_predictit_markets():
-    raw = json.load(urllib.urlopen("https://www.kimonolabs.com/api/1z8qa6p4?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1"))
+def get_predictit_markets(from_file=None):
+    if(from_file is not None):
+        raw = json.loads(open(from_file).read())
+        #GET https://www.kimonolabs.com/api/1z8qa6p4?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1    
+    else:
+        raw = json.load(urllib.urlopen("https://www.kimonolabs.com/api/1z8qa6p4?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1"))
 
     results = []
 
@@ -13,8 +17,12 @@ def get_predictit_markets():
     return results
 
 
-def get_predictit_marketdata():
-    raw = json.load(urllib.urlopen("https://www.kimonolabs.com/api/bzvl9p4e?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1"))
+def get_predictit_marketdata(from_file=None):
+    if(from_file is not None):
+        raw = json.loads(open(from_file).read())
+        #GET https://www.kimonolabs.com/api/bzvl9p4e?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1
+    else:
+        raw = json.load(urllib.urlopen("https://www.kimonolabs.com/api/bzvl9p4e?apikey=73b982d2afa7f55abf54216505965f11&kimmodify=1"))
 
     results = {}
 

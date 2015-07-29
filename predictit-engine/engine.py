@@ -1,10 +1,12 @@
 import kimono
 import buy_no
+import json
+import io
 
 
 def load():
-    markets = kimono.get_predictit_markets()
-    marketdata = kimono.get_predictit_marketdata()
+    markets = kimono.get_predictit_markets('data/markets.json')
+    marketdata = kimono.get_predictit_marketdata('data/marketdata.json')
 
     for m in markets:
         m.data = marketdata[m.market_id]
