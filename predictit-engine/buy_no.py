@@ -1,52 +1,45 @@
 import itertools
-from models import Position, Scenario
+
 
 def evaluate(market):
 
-    maxReturn = (None, None, -1000)
+    def by_short_price(x):
+        if len(x.short_offers) == 0:
+            return 2
+        return x.short_offers[0]
 
-    for c in _generate_scenarios(market.data):
-        for w in c.positions:
-            ret = _evaluate_scenario(c, w)
-            if(ret > maxReturn[2]):
-                maxReturn = (c,w,ret)
-    
-    return maxReturn
+    lastReturn = -10000
+    minShares = 10000
+    counter = 0
+    runningCost = 0.0
+    contracts = sorted(market.contracts, key=by_short_price)
+    toBuy = []
 
-def _generate_scenarios(data):
-    positions = []
+    for c in contracts:
+        if(len(c.short_offers) == 0):
+            break
 
-    for d in data:
-        if(d.buy_no is not None):
-            positions.append(Position(d.ticker, d.buy_no, 1, 1.0, True))
+        offer = c.short_offers[0]
 
-    positions = sorted(positions, key=lambda x: x.cost, reverse = False)
-    
-    i = len(positions)
+        currentReturn = ((counter)/(runningCost+offer.price)) - 1
 
-    while(i > 1):
-        yield Scenario(list(_top_n(positions, i)))
-        i -=1
+        if(currentReturn < lastReturn):
+            break
 
-def _top_n(positions, n):
-    i = 1   
-    for p in positions:
-        if(i <= n):
-            yield p
-        i += 1
+        lastReturn = currentReturn
+        counter += 1
+        runningCost += offer.price
+        if(offer.shares < minShares):
+            minShares = offer.shares
+
+        toBuy.append(c.ticker)
 
 
-def _evaluate_scenario(scenario, winner):
-    for p in scenario.positions:
-        if(p.ticker == winner.ticker):
-            p.pays = False
-        else:
-            p.pays = True
-    ret = scenario.get_return()
 
-    return ret
+    if lastReturn > 0:
+        totalCost = runningCost*minShares
+        totalGain = lastReturn * totalCost
+        return (lastReturn, totalGain, totalCost, minShares, toBuy)
+    return None
 
-def _print_scenario(scenario, winner):
-    print('Positions: ' + scenario.positionstring())
-    print('Winner ' + winner.ticker)
     

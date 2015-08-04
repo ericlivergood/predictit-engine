@@ -1,14 +1,3 @@
-class Ticker(object):
-    def __init__(self, name, ticker, buy_yes, buy_no, sell_yes, sell_no, url, market_id):
-        self.name = name
-        self.ticker = ticker
-        self.buy_yes = buy_yes
-        self.buy_no = buy_no
-        self.sell_yes = sell_yes
-        self.sell_no = sell_no
-        self.url = url
-        self.market_id = market_id  
-
 class Scenario(object):
     def __init__(self, positions):
         self.positions = positions
@@ -33,17 +22,25 @@ class Scenario(object):
 
         return ','.join(tickers)
 
-
-class Position(object):
-    def __init__(self, ticker, cost, shares, payout, pays):
-        self.ticker = ticker
-        self.cost = cost
+class Offer(object):
+    def __init__(self, contract, type, price, shares):
+        self.contract = contract
+        self.type = type
+        self.price = price
         self.shares = shares
-        self.payout = payout
-        self.pays = pays
+
+class Contract(object):
+    def __init__(self, ticker, name, url):
+        self.ticker = ticker
+        self.name = name
+        self.url = url
+        self.long_offers = []
+        self.short_offers = []
 
 class Market(object):
-    def __init__(self, name, market_id, url):
+    def __init__(self, name, market_id, url, type):
         self.name = name
         self.market_id = market_id
         self.url = url
+        self.type = type
+        self.contracts = []

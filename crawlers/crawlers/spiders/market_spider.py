@@ -129,4 +129,4 @@ class MarketSpider(scrapy.Spider):
             i += 1
 
         if MarketSpider.is_complete(self, response):
-            yield m
+            return m
