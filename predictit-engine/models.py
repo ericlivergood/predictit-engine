@@ -43,6 +43,7 @@ class Position(object):
         self.pays = pays
 
 class Market(object):
-    def __init__(self, name, market_id):
+    def __init__(self, name, market_id, url):
         self.name = name
         self.market_id = market_id
+        self.url = url
