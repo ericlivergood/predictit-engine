@@ -46,4 +46,4 @@ def evaluate_all(markets):
                 print ('')
 
 #evaluate_all(load())
-#evaluate_all(load('data/scrapy.json'))
+evaluate_all(load('data/scrapy.json'))

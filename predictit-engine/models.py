@@ -37,6 +37,24 @@ class Contract(object):
         self.long_offers = []
         self.short_offers = []
 
+    def cost_to_buy_n_short(self, n):
+        bought = 0
+        cost = 0.0
+        level = 0
+        while(bought < n and level < len(self.short_offers)):
+            current = self.short_offers[level]
+
+            if(current.shares + bought >= n):
+                return cost + (n-bought)*current.price
+            else:
+                bought += current.shares
+                cost += current.shares * current.price
+            level += 1
+
+        return None
+
+
+
 class Market(object):
     def __init__(self, name, market_id, url, type):
         self.name = name

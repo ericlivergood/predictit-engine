@@ -1,45 +1,65 @@
 import itertools
 
-
 def evaluate(market):
+    start = 1
+    step = 1
+    n = step + start
+    current = _evaluate_for_n_shares(market, start)
+    
+    next = _evaluate_for_n_shares(market, n)
 
+    while(current is not None and next is not None):
+        if(next[1] <= current[1]):
+            break
+
+        n+=step
+        current = next
+        next = _evaluate_for_n_shares(market, n)
+
+    return current
+
+def _evaluate_for_n_shares(market, n):
     def by_short_price(x):
-        if len(x.short_offers) == 0:
+        cost = x.cost_to_buy_n_short(n)
+
+        if cost is None:
             return 2
-        return x.short_offers[0]
+        return cost
 
     lastReturn = -10000
-    minShares = 10000
+    lastGain = -10000
     counter = 0
     runningCost = 0.0
     contracts = sorted(market.contracts, key=by_short_price)
     toBuy = []
 
     for c in contracts:
-        if(len(c.short_offers) == 0):
+        price = c.cost_to_buy_n_short(n)
+        if(price is None):
             break
 
-        offer = c.short_offers[0]
-
-        currentReturn = ((counter)/(runningCost+offer.price)) - 1
-
-        if(currentReturn < lastReturn):
+        currentReturn = ((counter)/(runningCost+price)) - 1
+        currentGain = currentReturn * (runningCost + price)
+        #if(currentReturn < lastReturn):
+        #    break
+        if(currentGain < lastGain):
             break
+
 
         lastReturn = currentReturn
-        counter += 1
-        runningCost += offer.price
-        if(offer.shares < minShares):
-            minShares = offer.shares
+        lastGain = currentGain
+        counter += n
+        runningCost += price
 
         toBuy.append(c.ticker)
 
 
 
     if lastReturn > 0:
-        totalCost = runningCost*minShares
-        totalGain = lastReturn * totalCost
-        return (lastReturn, totalGain, totalCost, minShares, toBuy)
+        lastReturn *= .9 #simplified fee calculation
+        totalGain = lastReturn * runningCost 
+        return (lastReturn, totalGain, runningCost, n, toBuy)
+
     return None
 
     
