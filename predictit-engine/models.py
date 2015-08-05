@@ -38,11 +38,17 @@ class Contract(object):
         self.short_offers = []
 
     def cost_to_buy_n_short(self, n):
+        return self._cost_to_buy_n(n, self.short_offers)
+
+    def cost_to_buy_n_long(self, n):
+        return self._cost_to_buy_n(n, self.long_offers)
+
+    def _cost_to_buy_n(self, n, offers):
         bought = 0
         cost = 0.0
         level = 0
-        while(bought < n and level < len(self.short_offers)):
-            current = self.short_offers[level]
+        while(bought < n and level < len(offers)):
+            current = offers[level]
 
             if(current.shares + bought >= n):
                 return cost + (n-bought)*current.price

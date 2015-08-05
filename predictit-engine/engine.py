@@ -1,8 +1,10 @@
 #import kimono
-import buy_no#, buy_yes
+import buy_no, buy_yes, buy_yes_no
 import json
 import io
 from models import Market, Contract, Offer
+
+blacklist = ['1328']
 
 
 def load(path):
@@ -29,21 +31,24 @@ def load(path):
             markets.append(m)
     return markets
 
+def out(m, t, x):
+    if(x is not None and x[0] > 0):
+        print(m.name +'('+m.market_id+')-- ' + t)
+        print('-------------------------------------------')
+        print('Return: $'+str(x[1]) + ' ('+str(x[0]*100)+'%)')
+        print('Cost: $'+str(x[2]) + ', ' + str(x[3]) + ' shares')
+        print ('Tickers: ' + ','.join(x[4]))
+        print ('')  
 
 
 
 def evaluate_all(markets):
     for m in markets:
-        #if(m.market_id == '1232'):
-        if(1==1):
-            x = buy_no.evaluate(m)
-            if(x is not None and x[0] > 0):
-                print(m.name +'('+m.market_id+')')
-                print('-------------------------------------------')
-                print('Return: $'+str(x[1]) + ' ('+str(x[0]*100)+'%)')
-                print('Cost: $'+str(x[2]) + ', ' + str(x[3]) + ' shares')
-                print ('Tickers: ' + ','.join(x[4]))
-                print ('')
+        if(m.market_id not in blacklist):
+            out(m, 'BUY YES', buy_yes.evaluate(m))
+            out(m, 'BUY NO', buy_no.evaluate(m))
+            out(m, 'BUY YES/NO', buy_yes_no.evaluate(m))
+
 
 #evaluate_all(load())
-evaluate_all(load('data/scrapy.json'))
+evaluate_all(load('data/data.json'))
