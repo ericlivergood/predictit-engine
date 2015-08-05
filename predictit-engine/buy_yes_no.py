@@ -42,7 +42,6 @@ def _evaluate_for_n_shares(market, n):
 
 
 def _evaluate_contract(contract, n):
-    toBuy = []
     long_price = contract.cost_to_buy_n_long(n)
     short_price = contract.cost_to_buy_n_short(n)
 

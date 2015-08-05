@@ -52,6 +52,3 @@ def test_evaluate_notprofitable():
     
     assert r is None
 
-
-class Expando(object):
-    pass
