@@ -4,6 +4,9 @@ def evaluate(market):
 	if(market.type == 'SingleOption'):
 		return
 
+	if(len(market.contracts) == 0):
+		return
+
 	start = 1
 	step = 1
 	n = step + start
